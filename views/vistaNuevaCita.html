@@ -1,0 +1,64 @@
+<script>
+  function SubForm(){
+    console.log($('#frm_cita').serialize());
+      $.ajax({
+          url:'http://localhost:8080/Clientes',
+          type:'post',
+          data:$('#frm_cita').serialize(),
+          success:function(id){
+            $.ajax({
+                url:'http://localhost:8080/Clientes/'+id.insertId,
+                type:'get',
+                success:function(cliente){
+                  var agenda = {"titulo":cliente[0].nombre, "notas":$("#notas").val(), "fecha_creada":$("#fecha_creada").val(), "ubicacion":$("#ubicacion").val(), "cliente_id":cliente[0].cliente_id};
+                  $.ajax({
+                      url:'http://localhost:8080/Agendas',
+                      type:'post',
+                      data:agenda,
+                      success:function(data){
+                        llenarCitas();
+                          console.log(data);
+                      }
+                  });
+                }
+            });
+          }
+      });
+      $('#frm_cita').trigger("reset");
+      vistaMain();
+  }
+</script>
+
+<div class="uk-container uk-margin-large-top">
+
+  <form id="frm_cita">
+    <!-- TODO separar en dos columnas -->
+    <!-- TODO agregar campos y afinar datepicker -->
+    <fieldset class="uk-fieldset">
+      <div class="uk-margin">
+        <input class="uk-input" id="nombre" type="text" placeholder="Nombre" name="nombre">
+      </div>
+      <div class="uk-margin">
+        <input class="uk-input" type="text" placeholder="Teléfono" name="telefono">
+      </div>
+      <div class="uk-margin">
+        <input class="uk-input" type="text" placeholder="Fecha" id="fecha_creada">
+        <script>
+          $("#fecha_creada").AnyTime_picker( {
+            format: "%Y-%m-%d %H:%i:%s %E %#",
+            formatUtcOffset: "%: (%@)",
+            hideInput: true,
+            placement: "inline" } );
+        </script>
+      </div>
+      <div class="uk-margin">
+        <input class="uk-input" type="text" placeholder="Direccion" id="ubicacion">
+      </div>
+      <div class="uk-margin">
+        <textarea class="uk-textarea" rows="4" placeholder="Notas" id="notas"></textarea>
+      </div>
+  </fieldset>
+  </form>
+  <button class="uk-button uk-button-primary" onclick="subForm();">Agendar</button>
+
+</div>

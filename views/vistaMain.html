@@ -1,0 +1,81 @@
+<div class="uk-container">
+
+  <!-- Menú interno (pestañas) -->
+  <ul id="menuPestanas" uk-tab uk-switcher="animation: uk-animation-fade" class="uk-padding">
+      <li id="tab_Agenda" class="uk-active"><a href="#">Agenda</a></li>
+      <li id="tab_Flujo"><a href="#">Flujo de ventas</a></li>
+      <!-- Si hubiera otra pestana, necesita tener su div en uk-switcher-->
+  </ul> <!-- /pestañas -->
+
+  <ul class="uk-switcher"><!-- contenedor para los paneles -->
+
+    <div id="panelAgenda">
+      <table class="uk-table uk-table-small uk-table-striped">
+        <thead>
+          <tr> <!-- este renglón contiene el botón de agregar -->
+              <td><button class="uk-button uk-button-small"
+                onclick="vistaAux('Crear Cita','vistaNuevaCita')">
+                Crear cita...</button>
+              <!-- <div uk-dropdown="mode: click">
+                <ul class="uk-nav uk-dropdown-nav">
+                  <li><a href="#">Demostración</a></li>
+                  <li class="uk-nav-divider"></li>
+                  <li><a href="#">Pago</a></li>
+                  <li><a href="#">Entrega</a></li>
+                  <li><a href="#">Seguimiento</a></li>
+                </ul>
+              </div> --></td>
+              <td></td>
+              <td></td>
+          </tr><!-- /renglonAgregar -->
+        </thead>
+        <tbody id="tbl_citas">
+            <!-- <tr> -->
+            <!-- <tr> -->
+        </tbody>
+      </table>
+    </div><!-- /agenda -->
+
+    <div id="panelFlujo">
+      <table class="uk-table uk-table-small uk-table-striped">
+        <tbody id="tbl_flujo">
+          <thead>
+            <tr>
+              <th class="uk-table-expand">Nombre</th>
+              <th>último evento</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tr>
+            <td><a class="uk-link-text" onclick="vistaAux('','detalleCliente');">Nombre</a></td>
+            <!-- TODO Nombre será link que lleve a detalleCliente.html y cargue detalles correspondientes -->
+            <td>Status</td>
+          </tr>
+          <tr>
+            <td><a class="uk-link-text" onclick="vistaAux('','detalleCliente');">Nombre</a></td>
+            <td>Status</td>
+          </tr>
+    <!----><tr>
+            <td><a class="uk-link-text" onclick="vistaAux('','detalleCliente');">Nombre</a></td>
+            <td>Status</td>
+          </tr><!-- hasta aqui el bloque-->
+        </tbody>
+      </table>
+    </div>
+
+  </ul><!-- /contenedorPaneles -->
+
+</div><!-- /container -->
+
+<script>
+
+function llenarCitas(){
+  $.ajax({url: "http://localhost:8080/Agendas", success: function(result){
+    $("#tbl_citas").empty();
+    result.forEach(element =>{$("#tbl_citas").append("<tr><td>"+element.titulo+"</td><td>"+element.fecha_creada+"</td><td>"+element.ubicacion+"</td></tr>");});
+  }});
+}
+
+llenarCitas();
+
+</script>
