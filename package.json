@@ -1,0 +1,34 @@
+{
+  "name": "gabo-rest",
+  "version": "1.0.0",
+  "description": "Back-end de Rick con vistas de Gabo ",
+  "main": "server.js",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "ejs": "^2.5.8",
+    "express": "^4.16.3",
+    "jsonwebtoken": "^8.2.0",
+    "mysql": "^2.15.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RichardDecaff/Gabo-Rest.git"
+  },
+  "keywords": [
+    "NodeJs",
+    "ExpressJs",
+    "bcrypt",
+    "JWT"
+  ],
+  "author": "RichardDecaff",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/RichardDecaff/Gabo-Rest/issues"
+  },
+  "homepage": "https://github.com/RichardDecaff/Gabo-Rest#readme"
+}

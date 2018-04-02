@@ -1,0 +1,28 @@
+<head>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+
+<body>
+    <div id="container">
+        <div>
+            <table>
+                <thead>
+                    <tr><th>Titutlo</th><th>Notas</th><th>Fecha</th><th>Ubicacion</th><th>Visibilidad</th><th>Resultado</th></tr>
+                </thead>
+                <tbody id='body_agendas'>
+                    
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+</body>
+<script>
+    function llenarCitas(){
+  $.ajax({url: "http://localhost:8080/Agendas", success: function(result){
+    $("#tbl_citas").empty();
+    result.forEach(element =>{$("#tbl_citas").append("<tr><td>"+element.titulo+"</td><td>"+element.fecha_creada+"</td><td>"+element.ubicacion+"</td></tr>");});
+  }});
+}
+llenarCitas();
+</script>

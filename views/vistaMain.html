@@ -70,7 +70,7 @@
 <script>
 
 function llenarCitas(){
-  $.ajax({url: "http://localhost:8080/Agendas", success: function(result){
+  $.ajax({url: "http://localhost:8080/api/Agendas", success: function(result){
     $("#tbl_citas").empty();
     result.forEach(element =>{$("#tbl_citas").append("<tr><td>"+element.titulo+"</td><td>"+element.fecha_creada+"</td><td>"+element.ubicacion+"</td></tr>");});
   }});
