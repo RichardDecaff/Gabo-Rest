@@ -1,22 +1,49 @@
-<!DOCTYPE html><html lang='en' class=''><meta charset="UTF-8">
-<head>
+<!DOCTYPE html>
+<html lang='en' class=''>
 <meta charset="UTF-8">
-<link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-beta.40/css/uikit.min.css'>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-beta.40/js/uikit.min.js"></script>
+
+<head>
+  <meta charset="UTF-8">
+  <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-beta.40/css/uikit.min.css'>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-beta.40/js/uikit.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script>
+    console.log("Test");
+    function loginAuth() {
+      var data = $('#login').serialize();
+      $.ajax({
+        type: "POST",
+        url: "http://localhost:8080/auth/login",
+        data: data,
+        success: function (data, textStatus, xhr) {
+          console.log(xhr.status);
+        },
+        dataType: "html",
+        contentType: "application/x-www-form-urlencoded; charset=UTF-8"
+      });
+    }
+  </script>
 </head>
+
 <body>
 
-<div class="uk-container uk-margin-xlarge-top">
-  <div class="uk-tile uk-tile-primary uk-width-2-5 uk-margin-auto uk-padding">
-    <div>
-      <img src="../400dpiLogo.jpg" class="uk-margin-bottom"/>
+  <div class="uk-container uk-margin-xlarge-top">
+    <div class="uk-tile uk-tile-primary uk-width-2-5 uk-margin-auto uk-padding">
+      <div>
+        <img src="./400dpiLogo.jpg" class="uk-margin-bottom" />
+      </div>
+      <form id="login" action="/auth/login" method="post" enctype="application/x-www-form-urlencoded">
+        <div class="uk-margin">
+          <input name="correo" class="uk-align-center uk-input uk-form-width-medium uk-form-medium" type="text" placeholder="email">
+        </div>
+        <div class="uk-margin">
+          <input name="login" class="uk-align-center uk-input uk-form-width-medium uk-form-medium" type="password" placeholder="contraseña">
+        </div>
+        <button class="uk-button uk-button-primary uk-button-small uk-align-center uk-margin-remove-bottom" type="button" onclick="loginAuth();">acceder</button>
+      </form>
     </div>
-    <form id="login" action="/auth/login" method="post" enctype="application/x-www-form-urlencoded">
-      <div class="uk-margin"><input name="correo" class="uk-align-center uk-input uk-form-width-medium uk-form-medium" type="text" placeholder="email"></div>
-      <div class="uk-margin"><input name="password" class="uk-align-center uk-input uk-form-width-medium uk-form-medium" type="password" placeholder="contraseña"></div>
-        <button class="uk-button uk-button-primary uk-button-small uk-align-center uk-margin-remove-bottom" type="submit">acceder</button>
-    </form>
   </div>
-</div>
 
-</body></html>
+</body>
+
+</html>
