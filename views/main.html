@@ -16,9 +16,6 @@
   <script src="../lib/anytime.5.2.0.min.js"></script>
   <link rel="stylesheet" href="../lib/anytime.5.2.0.min.css" />
 
-  <!-- funciones de ayuda -->
-  <script src="../main.js"></script>
-
 </head>
 <body>
 
@@ -48,18 +45,18 @@
           <div class="uk-offcanvas-bar">
               <div class="uk-panel">
 
-                  <!-- Solo para nivel > 1 -->
-                  <!-- algo asi como condicional en EJS -->
+              <!--Solo para nivel > 1
                   <ul class="uk-nav uk-nav-default uk-nav uk-margin-top">
                       <li class="uk-nav-header">Administrar</li>
                       <li><a href="#" onclick="vistaAux('Gestión de Usuarios', 'adminUsuarios')">Usuarios</a></li>
                       <li><a href="#">Capacitación</a></li>
-                      <li><a href="#" onclick="vistaAux('test', 'vistaNuevaCita');">Test</a></li>
-                  </ul><!-- /nivel>1 -->
+                  </ul>
+                  /nivel>1 -->
 
                   <ul class="uk-nav uk-nav-default uk-nav">
                       <li class="uk-nav-header">$USERNAME</li>
                       <li><a href="#">Salir</a></li>
+                      <li><a href="#" onclick="vistaAux('Gestión de Usuarios', 'adminUsuarios')">Usuarios</a></li>
                   </ul>
 
               </div>
@@ -73,6 +70,28 @@
   </div><!-- /app -->
 
   <script type="text/javascript">
+  function vistaMain() {
+    $('#app').load('vistaMain.html');
+    $('#titulo').text('CRM28');
+    $('#botonMenu').attr('style','');
+    $('#botonRegresar').attr('style', 'visibility: hidden;');
+    $('.uk-navbar-container').attr('style', 'background: #f8f8f8;');
+    $('#titulo').removeClass('uk-light');
+    //TODO variable global en EJS para titulo main
+  }
+
+  function vistaAux(titulo, vista) {
+    //ocultar menu
+    UIkit.offcanvas('#offcanvas').hide();
+
+    $('#app').load(vista + '.html');
+    $('#titulo').text(titulo);
+    $('#botonRegresar').attr('style','');
+    $('#botonMenu').attr('style', 'visibility: hidden;');
+    $('.uk-navbar-container').attr('style', 'background: #1e87f0;');
+    $('#titulo').addClass('uk-light');
+  }
+
     $(document).ready(vistaMain());
   </script>
 

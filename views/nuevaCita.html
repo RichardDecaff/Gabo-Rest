@@ -1,0 +1,92 @@
+<script>
+  function subForm(){
+    console.log($('#frm_cita').serialize());
+      $.ajax({
+          url:'http://localhost:8080/api/Clientes',
+          type:'post',
+          data:$('#frm_cita').serialize(),
+          success:function(id){
+            $.ajax({
+                url:'http://localhost:8080/api/Clientes/'+id.insertId,
+                type:'get',
+                success:function(cliente){
+                  var agenda = {"titulo":cliente[0].nombre, "notas":$("#notas").val(), "fecha_creada":$("#fecha_creada").val(), "ubicacion":$("#ubicacion").val(), "cliente_id":cliente[0].cliente_id};
+                  $.ajax({
+                      url:'http://localhost:8080/api/Agendas',
+                      type:'post',
+                      data:agenda,
+                      success:function(data){
+                        llenarCitas();
+                          console.log(data);
+                      }
+                  });
+                }
+            });
+          }
+      });
+      $('#frm_cita').trigger("reset");
+      vistaMain();
+  }
+</script>
+
+<div class="uk-container uk-container-small uk-margin-large-top">
+
+  <div class="uk-grid">
+    <div class="uk-width-1-2">
+      <h4>Datos del Cliente</h4>
+      <form id="formCliente">
+        <fieldset class="uk-fieldset">
+          <div class="uk-margin">
+            <input class="uk-input" id="nombre" type="text" placeholder="Nombre(s)" name="nombre">
+          </div>
+          <div class="uk-margin">
+            <input class="uk-input" id="apellidoMat" type="text" placeholder="Apellido materno" name="apellido">
+            <input class="uk-input" id="apellidoPat" type="text" placeholder="Apellido paterno" name="apellido">
+          </div>
+          <div class="uk-margin">
+            <input class="uk-input" type="text" placeholder="Tel celular" name="celular">
+            <input class="uk-input" type="text" placeholder="Tel fijo" name="telfijo">
+            <input class="uk-input" type="text" placeholder="Tel trabajo" name="teltrabajo">
+          </div>
+          <div class="uk-margin">
+            <textarea class="uk-textarea" rows="4" placeholder="Notas" id="notas"></textarea>
+          </div>
+        </fieldset>
+      </form>
+
+    </div> <!-- /datos cliente -->
+
+    <div class="uk-width-1-2">
+      <h4>Detalles de la cita</h4>
+        <form id="formCita">
+          <fieldset>
+            <div class="uk-margin">
+              <input class="uk-input" type="text" placeholder="Fecha" id="fecha_creada">
+              <script>
+                $("#fecha_creada").AnyTime_picker({
+                  firstDOW: 1,
+                  askSecond: false,
+                  labelTitle: "Hora y Fecha",
+                  dayNames: ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"],
+                  monthAbbreviations: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
+                  hideInput: true,
+                  placement: "inline"
+                });
+              </script>
+            </div>
+            <div class="uk-margin">
+              <input class="uk-input" type="text" placeholder="Calle y número" id="ubicacion">
+              <input class="uk-input" type="text" placeholder="Colonia">
+              <input class="uk-input" type="text" placeholder="Ciudad">
+              <input class="uk-input" type="text" placeholder="Referencia">
+            </div>
+          </fieldset>
+        </form>
+    </div> <!-- /detalles cita -->
+
+  </div>
+
+  <button class="uk-button uk-button-primary uk-margin-large-bottom uk-margin-large-top" onclick="subForm();">
+    Agendar</button>
+
+</div>

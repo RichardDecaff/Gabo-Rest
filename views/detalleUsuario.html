@@ -1,5 +1,5 @@
 <script>
-  $('#titulo').text('Detalles de $CLIENTE');
+  $('#titulo').text('Detalles de $NOMBRE');
   //TODO cargar datos de clente existente según indique variable local
 
   function modoEdicion() {
@@ -23,8 +23,9 @@
           </div>
           <div class="uk-margin">
             <input class="uk-input" type="text" placeholder="Tel celular" name="celular" disabled>
-            <input class="uk-input" type="text" placeholder="Tel fijo" name="telfijo" disabled>
-            <input class="uk-input" type="text" placeholder="Tel trabajo" name="teltrabajo" disabled>
+          </div>
+          <div class="uk-margin">
+            <input class="uk-input" type="text" placeholder="Correo" name="email" disabled>
           </div>
           <div class="uk-margin">
             <textarea class="uk-textarea" rows="4" placeholder="Notas" id="notas" disabled></textarea>
@@ -37,19 +38,6 @@
 
     <div class="uk-width-2-5">
       <div class="uk-card uk-card-hover uk-card-secondary uk-card-body uk-margin">
-          <h4 class="uk-card-title uk-text-warning">Archivado</h4>
-          <p class="uk-text-meta">Registrado por $USER</p>
-      </div>
-      <div class="uk-card uk-card-hover uk-card-secondary uk-card-body uk-margin">
-          <h4 class="uk-card-title uk-text-success">Venta</h4>
-          <p class="uk-text-meta">Registrado por $USER</p>
-      </div>
-      <div class="uk-card uk-card-hover uk-card-secondary uk-card-body uk-margin">
-          <h4 class="uk-card-title">Demostración</h4>
-          <p class="uk-text-meta">Realizada por $USER y $USER</p>
-      </div>
-      <div class="uk-card uk-card-hover uk-card-secondary uk-card-body uk-margin">
-          <h4 class="uk-card-title">Alta</h4>
           <p class="uk-text-meta">Registrado por $USER</p>
       </div>
     </div>

@@ -14,7 +14,7 @@
         <thead>
           <tr> <!-- este renglón contiene el botón de agregar -->
               <td><button class="uk-button uk-button-small"
-                onclick="vistaAux('Crear Cita','vistaNuevaCita')">
+                onclick="vistaAux('Crear Cita','nuevaCita')">
                 Crear cita...</button>
               <!-- <div uk-dropdown="mode: click">
                 <ul class="uk-nav uk-dropdown-nav">
@@ -30,8 +30,7 @@
           </tr><!-- /renglonAgregar -->
         </thead>
         <tbody id="tbl_citas">
-            <!-- <tr> -->
-            <!-- <tr> -->
+
         </tbody>
       </table>
     </div><!-- /agenda -->
@@ -48,16 +47,18 @@
           </thead>
           <tr>
             <td><a class="uk-link-text" onclick="vistaAux('','detalleCliente');">Nombre</a></td>
-            <!-- TODO Nombre será link que lleve a detalleCliente.html y cargue detalles correspondientes -->
             <td>Status</td>
+            <td><span class="uk-icon-button" uk-icon="more"></span></td>
           </tr>
           <tr>
             <td><a class="uk-link-text" onclick="vistaAux('','detalleCliente');">Nombre</a></td>
             <td>Status</td>
+            <td><span class="uk-icon-button" uk-icon="more"></span></td>
           </tr>
-    <!----><tr>
+          <tr>
             <td><a class="uk-link-text" onclick="vistaAux('','detalleCliente');">Nombre</a></td>
             <td>Status</td>
+            <td><span class="uk-icon-button" uk-icon="more"></span></td>
           </tr><!-- hasta aqui el bloque-->
         </tbody>
       </table>
@@ -69,6 +70,9 @@
 
 <script>
 
+//TODO poner username en $USERNAME
+//TODO mostrar "administrar usuarios" si el nivel lo permite
+
 function llenarCitas(){
   $.ajax({url: "http://localhost:8080/api/Agendas", success: function(result){
     $("#tbl_citas").empty();
@@ -77,5 +81,4 @@ function llenarCitas(){
 }
 
 llenarCitas();
-
 </script>

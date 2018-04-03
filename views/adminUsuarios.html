@@ -1,0 +1,30 @@
+<script>
+  $('#titulo').text('Administración de Usuarios');
+</script>
+
+<div class="uk-container uk-margin">
+  <button class="uk-button uk-margin uk-button-primary" onclick="vistaAux('', 'detalleUsuario')">Agregar usuario</button>
+  <!-- TODO abrir la vista con parametro que indique nuevo usuario -->
+  <table class="uk-table uk-table-small uk-table-striped">
+      <thead>
+        <tr>
+          <th class="uk-table-expand">Nombre</th>
+          <th>Nivel</th>
+          <th>Desde</th>
+          <th>Registró</th>
+          <th><th/>
+        </tr>
+      </thead>
+      <tbody id="tbl_usuarios">
+        <tr>
+          <td>Nombre</td>
+          <td>Nivel</td>
+          <td>Registrado en</td>
+          <td>Registrado por</td>
+          <td><span class="uk-icon-button" uk-icon="more" onclick="vistaAux('','detalleUsuario')"></span></td>
+        </tr>
+      </tbody>
+    </table>
+
+
+</div>

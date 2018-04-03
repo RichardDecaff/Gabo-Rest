@@ -9,6 +9,10 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script>
     console.log("Test");
+    function showSignup() {
+      $('#login').addClass('uk-hidden');
+      $('#signup').removeClass('uk-hidden');
+    }
     function loginAuth() {
       var data = $('#login').serialize();
       $.ajax({
@@ -32,6 +36,7 @@
       <div>
         <img src="./400dpiLogo.jpg" class="uk-margin-bottom" />
       </div>
+      
       <form id="login" action="/auth/login" method="post" enctype="application/x-www-form-urlencoded">
         <div class="uk-margin">
           <input name="correo" class="uk-align-center uk-input uk-form-width-medium uk-form-medium" type="text" placeholder="email">
@@ -40,7 +45,23 @@
           <input name="login" class="uk-align-center uk-input uk-form-width-medium uk-form-medium" type="password" placeholder="contraseña">
         </div>
         <button class="uk-button uk-button-primary uk-button-small uk-align-center uk-margin-remove-bottom" type="button" onclick="loginAuth();">acceder</button>
+        <a class="uk-link-text" onclick="showSignup()">Crear una cuenta</a>
       </form>
+
+      <form id="signup" class="uk-hidden" action="" method="post" enctype="application/x-www-form-urlencoded">
+        <div class="uk-margin">
+          <input name="nombre" class="uk-align-center uk-input uk-form-width-medium uk-form-medium" type="text" placeholder="nombre">
+          <input name="apellidos" class="uk-align-center uk-input uk-form-width-medium uk-form-medium" type="text" placeholder="apellidos">
+        </div>
+        <div class="uk-margin">
+          <input name="correo" class="uk-align-center uk-input uk-form-width-medium uk-form-medium" type="text" placeholder="email">
+        </div>
+        <div class="uk-margin">
+          <input name="login" class="uk-align-center uk-input uk-form-width-medium uk-form-medium" type="password" placeholder="contraseña">
+        </div>
+        <button class="uk-button uk-button-primary uk-button-small uk-align-center uk-margin-remove-bottom" type="button" onclick="loginAuth();">registrarse</button>
+      </form>
+
     </div>
   </div>
 

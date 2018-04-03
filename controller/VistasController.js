@@ -10,7 +10,7 @@ router.use(bodyParser.json());
 
 router.use(express.static('./views'));
 
-router.route('/login').get(function(req, res) {
+router.route('/').get(function(req, res) {
   fs.readFile('./views/login.html', 'utf-8', function(err, data) {
     res.writeHead(200, {'Content-Type': 'text/html'});
     var temp = "test";
@@ -21,7 +21,7 @@ router.route('/login').get(function(req, res) {
 });
 
 router.route('/agenda').get(function(req, res) {
-  fs.readFile('./views/vistaMain.html', 'utf-8', function(err, data) {
+  fs.readFile('./views/main.html', 'utf-8', function(err, data) {
     res.writeHead(200, {'Content-Type': 'text/html'});
     var temp = "test";
     var renderedHtml = ejs.render(data, {temp: temp});
