@@ -5,8 +5,11 @@
   "main": "server.js",
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "cluster": "^0.7.7",
+    "domain": "0.0.1",
     "ejs": "^2.5.8",
     "express": "^4.16.3",
+    "express-cluster": "0.0.5",
     "jsonwebtoken": "^8.2.0",
     "mysql": "^2.15.0"
   },

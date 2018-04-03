@@ -35,10 +35,9 @@ router.post('/', VerificarToken, function (req, res) {
     var age = new Agenda(null, 1, req.usuario_id, req.body.titulo, req.body.notas, req.body.fecha_creada, req.body.ubicacion, 1, req.body.cliente_id, "Pendiente");
     Agenda.crearAgenda(agenda, function (err, agenda) {
         if (err) return res.status(500).send("Problema con la coneccion.");
-        if (!agenda) return res.status(404).send("La agenda no fue encontrada.");
+        if (!agenda) return res.status(404).send("La agenda no fue creada.");
         res.status(200).send(agenda);
     });
 });
-
 
 module.exports = router;
