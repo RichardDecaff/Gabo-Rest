@@ -1,24 +1,24 @@
-<div class="uk-container uk-container-small uk-margin-large-top">
+<!-- AnyTime date time picker-->
+<script src="../lib/anytime.5.2.0.min.js"></script>
+<link rel="stylesheet" href="../lib/anytime.5.2.0.min.css" />
 
+<div class="uk-container uk-container-small uk-margin-large-top">
   <div class="uk-grid">
     <div class="uk-width-1-2">
       <h4>Datos del Cliente</h4>
       <form id="formCliente">
         <fieldset class="uk-fieldset">
           <div class="uk-margin">
-            <input class="uk-input" id="nombre" type="text" placeholder="Nombre(s)" name="nombre">
+            <input class="uk-input" id="nombre" type="text" placeholder="Nombre completo" name="nombre">
           </div>
           <div class="uk-margin">
-            <input class="uk-input" id="apellidoMat" type="text" placeholder="Apellido materno" name="apellido">
-            <input class="uk-input" id="apellidoPat" type="text" placeholder="Apellido paterno" name="apellido">
+            <input class="uk-input" id="apellidoMat" type="text" placeholder="Apellido materno" name="apellido" disabled>
+            <input class="uk-input" id="apellidoPat" type="text" placeholder="Apellido paterno" name="apellido" disabled>
           </div>
           <div class="uk-margin">
-            <input class="uk-input" type="text" placeholder="Tel celular" name="celular">
-            <input class="uk-input" type="text" placeholder="Tel fijo" name="telfijo">
-            <input class="uk-input" type="text" placeholder="Tel trabajo" name="teltrabajo">
-          </div>
-          <div class="uk-margin">
-            <textarea class="uk-textarea" rows="4" placeholder="Notas" id="notas"></textarea>
+            <input class="uk-input" type="text" placeholder="Tel principal" name="telefono">
+            <input class="uk-input" type="text" placeholder="Tel fijo" name="telfijo" disabled>
+            <input class="uk-input" type="text" placeholder="Tel trabajo" name="teltrabajo" disabled>
           </div>
         </fieldset>
       </form>
@@ -28,7 +28,7 @@
     <div class="uk-width-1-2">
       <h4>Detalles de la cita</h4>
         <form id="formCita">
-          <fieldset>
+          <fieldset class="uk-fieldset">
             <div class="uk-margin">
               <input class="uk-input" type="text" placeholder="Fecha" id="fecha_creada">
               <script>
@@ -44,10 +44,10 @@
               </script>
             </div>
             <div class="uk-margin">
-              <input class="uk-input" type="text" placeholder="Calle y número" id="ubicacion">
-              <input class="uk-input" type="text" placeholder="Colonia">
-              <input class="uk-input" type="text" placeholder="Ciudad">
-              <input class="uk-input" type="text" placeholder="Referencia">
+              <input class="uk-input" type="text" placeholder="Dirección" id="ubicacion">
+            </div>
+            <div class="uk-margin">
+              <textarea class="uk-textarea" rows="4" placeholder="Referencia y notas" id="notas"></textarea>
             </div>
           </fieldset>
         </form>
@@ -62,17 +62,57 @@
 
 <script>
   $("#agendar").on('click', subForm);
-  function subForm(){
-    console.log($('#frm_cita').serialize());
-      $.ajax({
-          url:'http://localhost:8080/api/Clientes',
-          type:'post',
-          data:$('#frm_cita').serialize(),
-          success:function(id){
-            $.ajax({
-                url:'http://localhost:8080/api/Clientes/'+id.insertId,
-                type:'get',
-                success:function(cliente){
+function subForm() {
+  var data = $('#formCliente').serialize();
+  var nuevoID;
+  data += "&estado=agendada";
+  $.ajax({
+    url: './api/Clientes',
+    type: 'post',
+    data: data,
+    success: function(r){
+      nuevoID = r.cliente_id;
+      console.log("nuevo cliente: ID " + nuevoID);
+      crearCita(nuevoID);
+    },
+    error: function(e){ console.log(e);}
+  });
+}
+
+function crearCita(id){
+  var cliente, nombre;
+  $.ajax({
+    url: './api/Clientes/' + id,
+    type: 'get',
+    async: false,
+    success: function(r){
+      nombre = r.nombre;
+      cliente = r.cliente_id;
+      console.log(cliente);
+    }
+  });
+  var evento = {
+    titulo: ("Demostración a " + nombre),
+    notas:  $('#notas').val(),
+    fecha_creada: $("#fecha_creada").val(),
+    ubicacion: $("#ubicacion").val(),
+    cliente_id: cliente,
+    usuario_id: me.usuario_id
+  };
+  console.table(evento);
+  $.ajax({
+    url: './api/Agendas',
+    type: 'post',
+    data: evento,
+    success: function(r) {
+      restablecerVista();
+      console.log(r.responseText);
+    }
+  });
+
+}
+
+/*
                   var agenda = {"titulo":cliente[0].nombre, "notas":$("#notas").val(), "fecha_creada":$("#fecha_creada").val(), "ubicacion":$("#ubicacion").val(), "cliente_id":cliente[0].cliente_id};
                   $.ajax({
                       url:'http://localhost:8080/api/Agendas',
@@ -91,6 +131,6 @@
           }
       });
       $('#frm_cita').trigger("reset");
-      vistaMain();
-  }
+      restablecerVista();
+  }*/
 </script>

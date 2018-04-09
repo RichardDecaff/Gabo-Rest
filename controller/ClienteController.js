@@ -32,7 +32,7 @@ router.get('/usuario/:id', function (req, res) {
 });
 
 router.post('/', VerificarToken, function (req, res) {
-    var clien = new Cliente(null, req.body.nombre, req.body.telefono, req.body.estado, req.body.fecha_creado, req.usuario_id);
+    var clien = new Cliente(null, req.body.nombre, req.body.telefono, req.body.estado, req.fecha_creado, req.usuario_id);
     Cliente.crearCliente(clien, function (err, cliente) {
         if (err) return res.status(500).send("Problema con la coneccion.");
         if (!cliente) return res.status(404).send("El cliente no fue creado.");

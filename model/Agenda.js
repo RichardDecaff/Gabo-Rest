@@ -4,7 +4,7 @@ class Agenda {
 
   constructor(agenda_id, usuario_id, titulo, notas, fecha_creada, ubicacion, visibilidad, cliente_id, resultado){
     this.agenda_id = agenda_id;
-    this.usuario_id = this.usuario_id;
+    this.usuario_id = usuario_id;
     this.titulo = titulo;
     this.notas = notas;
     this.fecha_creada=fecha_creada;

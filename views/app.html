@@ -20,6 +20,7 @@
     </div>
     <div class="uk-navbar-right">
       <a id="botonMenu" class="uk-navbar-toggle" uk-navbar-toggle-icon href="#menu" uk-toggle></a>
+      <a href="" uk-icon="icon: arrow-left; ratio: 2" id="btnRegresar" class="uk-hidden uk-margin-right"></a>
     </div>
   </nav>
 
@@ -35,7 +36,9 @@
   var $tituloPag = $("div.uk-logo");
   var $app = $("#app");
   var $menu = $("div.uk-offcanvas-bar");
-  var $barraTitulo = $("nav.uk-navbar")
+  var $barraTitulo = $("nav.uk-navbar");
+  var $btnMenu = $("#botonMenu");
+  var $btnBack = $("#btnRegresar");
 
   function pedirLogin() {
     $barraTitulo.hide();
@@ -68,7 +71,7 @@
 
   function cargarVistaPrincipal() {
     $barraTitulo.show();
-    $app.load("./vistaMain.html");
+    restablecerVista();
     //construir menu
     var elMenu = "<h2>Tu ID: " + me.usuario_id + "</h2><a class=\"uk-link-text\" href=\"\" id=\"logout\">Cerrar sesión</a>";
     if(me.nivel > 1){
@@ -79,6 +82,20 @@
       localStorage.removeItem('r28Token');
       pedirLogin();
     })
+  }
+//TODO cargar sub-vista, restablecer vista principal, modularizar con la carga principal de app.html
+//TODO append un div despues de #app y ocultar #app, en vez de cargar todo main de nuevo
+  function restablecerVista() {
+    $tituloPag.text("CRM28");
+    $app.load("./vistaMain.html");
+    $btnBack.addClass('uk-hidden');
+    $btnMenu.removeClass('uk-hidden');
+  }
+
+  function subVista(v) {
+    $app.load(v);
+    $btnMenu.addClass('uk-hidden');
+    $btnBack.removeClass('uk-hidden');
   }
 
   $(function() {

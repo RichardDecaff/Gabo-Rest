@@ -72,7 +72,7 @@
 function llenarCitas(){
   var $tblCitas = $("#tbl_citas");
   $.ajax({
-    url: "http://localhost:8080/api/Agendas",
+    url: ("./api/Agendas/usuario/" + me.usuario_id),
     success: function(result){
       $tblCitas.empty();
       if (result.length < 1) {
@@ -85,6 +85,11 @@ function llenarCitas(){
     }
   });
 }
-
-llenarCitas();
+$(function(){
+  llenarCitas();
+  $("#btnCita").on('click', function (){
+    //cargar vista nueva cita
+    subVista('nuevaCita.html');
+  })
+});
 </script>

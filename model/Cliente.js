@@ -4,10 +4,10 @@ class Cliente {
 
   constructor(cliente_id, nombre, telefono, estado, fecha_creado, usuario_id){
     this.cliente_id = cliente_id;
-    this.nombre = this.nombre;
+    this.nombre = nombre;
     this.telefono = telefono;
     this.estado = estado;
-    this.fecha_creado=fecha_creado;
+    this.fecha_registro = new Date(); //hora y fecha actual
     this.usuario_id = usuario_id;
   }
 
@@ -36,6 +36,7 @@ class Cliente {
 }
 
   static crearCliente(cliente, callback){
+    //console.log(cliente);
       pool.query('INSERT INTO tabla_cliente SET ?', cliente, function(error, result) {
         if (error) throw(error);
         callback(null,{"cliente_id" : result.insertId});
