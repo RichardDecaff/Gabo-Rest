@@ -16,6 +16,12 @@
   <script src="../lib/anytime.5.2.0.min.js"></script>
   <link rel="stylesheet" href="../lib/anytime.5.2.0.min.css" />
 
+  <script>
+  if(localStorage.getItem('token')) {
+    console.log("Have token: " + localStorage.getItem('token'));
+  }  
+  </script>
+
 </head>
 <body>
 
@@ -92,7 +98,7 @@
     $('#titulo').addClass('uk-light');
   }
 
-    $(document).ready(vistaMain());
+    $(vistaMain());
   </script>
 
 </body>

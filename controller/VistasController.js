@@ -11,17 +11,7 @@ router.use(bodyParser.json());
 router.use(express.static('./views'));
 
 router.route('/').get(function(req, res) {
-  fs.readFile('./views/login.html', 'utf-8', function(err, data) {
-    res.writeHead(200, {'Content-Type': 'text/html'});
-    var temp = "test";
-    var renderedHtml = ejs.render(data, {temp: temp});
-    res.end(renderedHtml);
-    res.end();
-  });
-});
-
-router.route('/agenda').get(function(req, res) {
-  fs.readFile('./views/main.html', 'utf-8', function(err, data) {
+  fs.readFile('./views/app.html', 'utf-8', function(err, data) {
     res.writeHead(200, {'Content-Type': 'text/html'});
     var temp = "test";
     var renderedHtml = ejs.render(data, {temp: temp});

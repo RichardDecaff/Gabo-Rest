@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <!-- UIkit CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-beta.40/css/uikit.min.css" />
+
+  <!-- UIkit JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-beta.40/js/uikit.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-beta.40/js/uikit-icons.min.js"></script>
+
+  <!-- Jquery -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+</head>
+<body>
+  <nav class="uk-navbar uk-navbar-container">
+    <div class="uk-navbar-left">
+      <div class="uk-navbar-item uk-logo uk-margin-left"></div>
+    </div>
+    <div class="uk-navbar-right">
+      <a id="botonMenu" class="uk-navbar-toggle" uk-navbar-toggle-icon href="#menu" uk-toggle></a>
+    </div>
+  </nav>
+
+  <div id="menu" uk-offcanvas="flip: true">
+    <div class="uk-offcanvas-bar">
+      <button class="uk-offcanvas-close" type="button" uk-close></button>
+    </div>
+  </div>
+
+  <div id="app" class="uk-container uk-margin-top"></div>
+
+  <script>
+  var $tituloPag = $("div.uk-logo");
+  var $app = $("#app");
+  var $menu = $("div.uk-offcanvas-bar");
+  var $barraTitulo = $("nav.uk-navbar")
+
+  function pedirLogin() {
+    $barraTitulo.hide();
+    $app.load("./login.html");
+  }
+
+  function validarToken() {
+    //console.log("validando");
+    $.ajax({
+      type: "GET",
+      url: "./auth/me",
+      success: function (d, t, r) {
+        //console.log("success: " + r.status);
+        me = JSON.parse(r.responseText);
+        cargarVistaPrincipal();
+      },
+      error: function (d, t, r) {
+        //si el token no es valido, cargar login de nuevo
+        //console.log("error: " + r.status);
+        $barraTitulo.hide();
+        $app.load("./login.html", function () {
+          var alert = $("<div class=\"uk-alert uk-alert-warning\">Necesitas volver a iniciar sesión</div>")
+          $loginForm.append(alert);
+        });
+      },
+      dataType: "html",
+      contentType: "application/x-www-form-urlencoded; charset=UTF-8"
+    });
+  }
+
+  function cargarVistaPrincipal() {
+    $barraTitulo.show();
+    $app.load("./vistaMain.html");
+    //construir menu
+    var elMenu = "<h2>Tu ID: " + me.usuario_id + "</h2><a class=\"uk-link-text\" href=\"\" id=\"logout\">Cerrar sesión</a>";
+    if(me.nivel > 1){
+      elMenu += "</br><a class=\"uk-link-text\" href=\"\" id=\"adminUsers\">Administrar usuarios</a>";
+    }
+    $menu.append($(elMenu));
+    $('#logout').on('click', function(){
+      localStorage.removeItem('r28Token');
+      pedirLogin();
+    })
+  }
+
+  $(function() {
+    //MAIN
+    //hay token guardado?
+    if(!localStorage.getItem('r28Token')) {
+      //si no
+      pedirLogin();
+    } else {
+      //si si, validar
+      $.ajaxSetup({
+        //enviar token en todas las solicitudes subsecuentes
+        headers: {"x-access-token": localStorage.getItem('r28Token')}
+      });
+      validarToken();
+    }//else token
+
+});
+  </script>
+</body>
