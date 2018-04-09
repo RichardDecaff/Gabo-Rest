@@ -33,7 +33,7 @@ router.get('/usuario/:id', function (req, res) {
 
 router.post('/', VerificarToken, function (req, res) {
     var evento = new Agenda(null, req.usuario_id, req.body.titulo, req.body.notas, req.body.fecha_creada, req.body.ubicacion, 1, req.body.cliente_id, "Pendiente");
-    console.log(evento);
+    //console.log(evento);
     Agenda.crearAgenda(evento, function (err, agenda) {
         if (err) return res.status(500).send("Problema con la coneccion.");
         if (!agenda) return res.status(404).send("La agenda no fue creada.");

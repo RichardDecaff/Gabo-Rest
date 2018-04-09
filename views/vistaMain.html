@@ -42,21 +42,7 @@
             <th></th>
           </tr>
         </thead>
-        <tr>
-          <td><a class="uk-link-text" onclick="vistaAux('','detalleCliente');">Nombre</a></td>
-          <td>Status</td>
-          <td><span class="uk-icon-button" uk-icon="more"></span></td>
-        </tr>
-        <tr>
-          <td><a class="uk-link-text" onclick="vistaAux('','detalleCliente');">Nombre</a></td>
-          <td>Status</td>
-          <td><span class="uk-icon-button" uk-icon="more"></span></td>
-        </tr>
-        <tr>
-          <td><a class="uk-link-text" onclick="vistaAux('','detalleCliente');">Nombre</a></td>
-          <td>Status</td>
-          <td><span class="uk-icon-button" uk-icon="more"></span></td>
-        </tr><!-- hasta aqui el bloque-->
+        <!-- renglones se insertan aqui -->
       </tbody>
     </table>
   </div>
@@ -85,11 +71,44 @@ function llenarCitas(){
     }
   });
 }
+
+function llenarClientes() {
+  var $tblFlujo = $("#tbl_flujo");
+  $.ajax({
+    url: ("./api/Clientes/usuario/" + me.usuario_id),
+    success: function(r){
+      $tblFlujo.empty();
+      if (r.length < 1){
+        $tblFlujo.append("<tr><td class=\"uk-text-meta\">No tienes clentes (todavia)</td><td></td><td></td></tr>");
+      };
+      r.forEach(function(e) {
+        var renglon = "<tr><td>" + e.nombre;
+        renglon += ("</td><td>" + estadosClientes[e.estado] + "</td><td>...</td></tr>");
+        //TODO insertar boton segun status
+        $tblFlujo.append(renglon);
+      });
+    }
+  });
+}
+
+
+var estadosClientes = [
+  'Demo agendada',
+  'Demo realizada',
+  'Anticipo pagado',
+  'Pago de contado',
+  'Entregado',
+  'Cita cancelada',
+  'No venta',
+  'Archivado'
+];
+
 $(function(){
-  llenarCitas();
   $("#btnCita").on('click', function (){
     //cargar vista nueva cita
     subVista('nuevaCita.html');
   })
+  llenarCitas();
+  llenarClientes();
 });
 </script>
