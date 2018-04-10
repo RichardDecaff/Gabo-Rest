@@ -56,6 +56,8 @@
 //TODO mostrar "administrar usuarios" si el nivel lo permite
 
 function llenarCitas(){
+  var now = (new Date().getTimezoneOffset())/60;
+  console.log(now);
   var $tblCitas = $("#tbl_citas");
   $.ajax({
     url: ("./api/Agendas/usuario/" + me.usuario_id),
@@ -64,12 +66,27 @@ function llenarCitas(){
       if (result.length < 1) {
         $tblCitas.append("<tr><td class=\"uk-text-meta\">No hay citas en la agenda</td><td></td><td></td></tr>");
       }
-      result.forEach(element =>{$("#tbl_citas").append("<tr><td>"+element.titulo+"</td><td>"+element.fecha_creada+"</td><td>"+element.ubicacion+"</td></tr>");});
+      result.forEach(element =>{$("#tbl_citas").append("<tr><td>"+element.titulo+"</td><td>"+fechaConFormato(element.fecha_creada, now)+"</td><td>"+element.ubicacion+"</td></tr>");});
     },
     error: function(){
       $tblCitas.append("<tr><td class=\"uk-text-meta\">Problema conectando con el servidor :(</td><td></td><td></td></tr>");
     }
   });
+}
+
+function fechaConFormato(d, tz) {
+  d = new Date(d);
+  var h = d.getHours();
+  d.setHours(tz + h);
+
+  return new Intl.DateTimeFormat('es-ES', {
+    month: 'short',
+    weekday: 'short',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+    hour12: true
+  }).format(d);
 }
 
 function llenarClientes() {
@@ -96,7 +113,7 @@ var estadosClientes = [
   'Demo agendada',
   'Demo realizada',
   'Anticipo pagado',
-  'Pago de contado',
+  'Pago de contado', //wait deposit
   'Entregado',
   'Cita cancelada',
   'No venta',
@@ -111,4 +128,11 @@ $(function(){
   llenarCitas();
   llenarClientes();
 });
+
+//TODO botones on submit en vez de clic, encabeado en vista agenda, formato fecha, dias semana, labels, minutos, esconder anio
+//TODO actualizacion de eventos segun fecha, opcion cancelar citas
+//TODO vista global para N2, agrupar por dia
+//no permitir eventos antes a hoy
+// no dejar encimar citas
+
 </script>
