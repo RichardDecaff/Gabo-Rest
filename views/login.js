@@ -1,5 +1,5 @@
-$("#login").on('click', loginAuth);
-$("#signup").on('click', signupAuth);
+$("#loginForm").submit(loginAuth);
+$("#signupForm").submit(signupAuth);
 //TODO unbind event hasta tener respuesta para no hacer multiples requests
 $loginForm = $('#loginForm');
 
@@ -9,15 +9,18 @@ function toggleSignup() {
   $('#signupForm').toggleClass('uk-hidden');
 }
 
-function signupAuth() {
+function signupAuth(e) {
 //TODO validar correo y contraseña NO HACER USUARIOS EN BLANCO
+  var $button = $(e.target);
+  $button.hide();
   var data = $('#signupForm').serialize();
   $.ajax({
     type: "POST",
     url: "./auth/registrarse",
     data: data,
     complete: function(r){
-      console.log(r.responseText);
+      var $button = $(e.target);
+      $button.show();
     },
     success: function(){
       toggleSignup()
@@ -27,9 +30,13 @@ function signupAuth() {
     dataType: "html",
     contentType: "application/x-www-form-urlencoded; charset=UTF-8"
   });
+  return false;
 }
 
-function loginAuth() {
+function loginAuth(e) {
+  e.preventDefault();
+  var $button = $(e.target);
+  $button.hide();
   $loginForm.find("div.uk-alert").remove();
   //TODO validar correo y contraseña
   var data = $loginForm.serialize();
@@ -38,7 +45,6 @@ function loginAuth() {
     url: "./auth/login",
     data: data,
     success: function (data, textStatus, r) {
-      console.log(r.status);
       var tokenResponse = JSON.parse(r.responseText);
       //console.log(tokenResponse.token);
       localStorage.setItem('r28Token', tokenResponse.token);
@@ -51,7 +57,11 @@ function loginAuth() {
       var alert = $("<div class=\"uk-alert uk-alert-warning\">Alguno de los datos es incorrecto</div>")
       $loginForm.append(alert);
     },
+    complete: function () {
+      $button.show();
+    },
     dataType: "html",
     contentType: "application/x-www-form-urlencoded; charset=UTF-8"
   });
+  return false;
 }
