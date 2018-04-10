@@ -77,7 +77,7 @@ function llenarCitas(){
 function fechaConFormato(d, tz) {
   d = new Date(d);
   var h = d.getHours();
-  d.setHours(tz + h);
+  //d.setHours(tz - h);
 
   return new Intl.DateTimeFormat('es-ES', {
     month: 'short',
