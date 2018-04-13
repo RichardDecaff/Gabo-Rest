@@ -10,20 +10,12 @@
   <div id="panelAgenda">
     <table class="uk-table uk-table-small uk-table-striped">
       <thead>
+        <button class="uk-button uk-button-small" id="btnCita">
+        Crear cita...</button>
         <tr> <!-- este renglón contiene el botón de agregar -->
-            <td><button class="uk-button uk-button-small" id="btnCita">
-              Crear cita...</button>
-            <!-- <div uk-dropdown="mode: click">
-              <ul class="uk-nav uk-dropdown-nav">
-                <li><a href="#">Demostración</a></li>
-                <li class="uk-nav-divider"></li>
-                <li><a href="#">Pago</a></li>
-                <li><a href="#">Entrega</a></li>
-                <li><a href="#">Seguimiento</a></li>
-              </ul>
-            </div> --></td>
-            <td></td>
-            <td></td>
+            <th>Evento</th>
+            <th>Hora</th>
+            <th>Ubicación</th>
         </tr><!-- /renglonAgregar -->
       </thead>
       <tbody id="tbl_citas">
@@ -52,21 +44,21 @@
 
 <script>
 
-//TODO poner username en $USERNAME
-//TODO mostrar "administrar usuarios" si el nivel lo permite
-
 function llenarCitas(){
-  var now = (new Date().getTimezoneOffset())/60;
-  console.log(now);
   var $tblCitas = $("#tbl_citas");
   $.ajax({
     url: ("./api/Agendas/usuario/" + me.usuario_id),
     success: function(result){
       $tblCitas.empty();
+      console.table(result);
       if (result.length < 1) {
         $tblCitas.append("<tr><td class=\"uk-text-meta\">No hay citas en la agenda</td><td></td><td></td></tr>");
       }
-      result.forEach(element =>{$("#tbl_citas").append("<tr><td>"+element.titulo+"</td><td>"+fechaConFormato(element.fecha_creada, now)+"</td><td>"+element.ubicacion+"</td></tr>");});
+      result.forEach(element => {
+        $("#tbl_citas").append("<tr><td>"+element.titulo+"</td><td>"
+        +fechaConFormato(element.fecha_creada)+"</td><td>"+element.ubicacion+"</td></tr>");
+      });
+      $("#tbl_citas").append("<th>Citas pasadas</th><th></th><th></th>")
     },
     error: function(){
       $tblCitas.append("<tr><td class=\"uk-text-meta\">Problema conectando con el servidor :(</td><td></td><td></td></tr>");
@@ -74,10 +66,9 @@ function llenarCitas(){
   });
 }
 
-function fechaConFormato(d, tz) {
+function fechaConFormato(d) {
   d = new Date(d);
   var h = d.getHours();
-  //d.setHours(tz - h);
 
   return new Intl.DateTimeFormat('es-ES', {
     month: 'short',
@@ -94,6 +85,7 @@ function llenarClientes() {
   $.ajax({
     url: ("./api/Clientes/usuario/" + me.usuario_id),
     success: function(r){
+      console.log(r);
       $tblFlujo.empty();
       if (r.length < 1){
         $tblFlujo.append("<tr><td class=\"uk-text-meta\">No tienes clentes (todavia)</td><td></td><td></td></tr>");
@@ -125,11 +117,15 @@ $(function(){
     //cargar vista nueva cita
     subVista('nuevaCita.html');
   })
+  $("#adminUsers").on('click', function(e){
+    e.preventDefault();
+    subVista('adminUsuarios.html');
+  })
+
   llenarCitas();
   llenarClientes();
 });
 
-//TODO botones on submit en vez de clic, encabeado en vista agenda, formato fecha, dias semana, labels, minutos, esconder anio
 //TODO actualizacion de eventos segun fecha, opcion cancelar citas
 //TODO vista global para N2, agrupar por dia
 //no permitir eventos antes a hoy

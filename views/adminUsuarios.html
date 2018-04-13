@@ -1,7 +1,3 @@
-<script>
-  $('#titulo').text('Administración de Usuarios');
-</script>
-
 <div class="uk-container uk-margin">
   <button class="uk-button uk-margin uk-button-primary" onclick="vistaAux('', 'detalleUsuario')">Agregar usuario</button>
   <!-- TODO abrir la vista con parametro que indique nuevo usuario -->
@@ -15,16 +11,20 @@
           <th><th/>
         </tr>
       </thead>
-      <tbody id="tbl_usuarios">
-        <tr>
-          <td>Nombre</td>
-          <td>Nivel</td>
-          <td>Registrado en</td>
-          <td>Registrado por</td>
-          <td><span class="uk-icon-button" uk-icon="more" onclick="vistaAux('','detalleUsuario')"></span></td>
-        </tr>
+      <tbody id="tblUsuarios">
       </tbody>
     </table>
 
-
 </div>
+
+<script>
+  $('#titulo').text('Administración de Usuarios');
+  var $tabla = $('#tblUsuarios');
+  $.get("./api/Usuarios/", function(r){
+    r.forEach(function(el) {
+      $tabla.append("<tr><td>" + el.correo + "</td><td>"+ el.nivel + "</td><td>-</td><td>-</td>" +
+      "<td><span class=\"uk-icon-button\" uk-icon=\"more\"></span></td></tr>");
+      //TODO bind each a click event for detalleUsuario
+    })
+  });
+</script>

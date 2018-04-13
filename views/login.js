@@ -1,6 +1,5 @@
 $("#loginForm").submit(loginAuth);
 $("#signupForm").submit(signupAuth);
-//TODO unbind event hasta tener respuesta para no hacer multiples requests
 $loginForm = $('#loginForm');
 
 function toggleSignup() {
@@ -36,8 +35,10 @@ function signupAuth(e) {
 function loginAuth(e) {
   e.preventDefault();
   var $button = $(e.target);
-  $button.hide();
+  var $waitMsg = $("<div class= \"uk-alert uk-alert-info\">Un momento...</div>");
   $loginForm.find("div.uk-alert").remove();
+  $button.hide();
+  $button.parent().append($waitMsg);
   //TODO validar correo y contraseña
   var data = $loginForm.serialize();
   $.ajax({
@@ -59,6 +60,7 @@ function loginAuth(e) {
     },
     complete: function () {
       $button.show();
+      $waitMsg.remove();
     },
     dataType: "html",
     contentType: "application/x-www-form-urlencoded; charset=UTF-8"

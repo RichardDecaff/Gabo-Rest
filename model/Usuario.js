@@ -9,6 +9,14 @@ class Usuario {
     this.nivel = nivel;
   }
 
+  static getUsuarios(id, callback){
+      var user_query = "select usuario_id, correo, nivel from tabla_usuario";
+      pool.query(user_query, function(err, result, fields) {
+        if (err) throw(err);
+        callback(null, result)
+      });
+  }
+
   static getUsuarioPorId(id, callback){
       var user_query = "select * from tabla_usuario where usuario_id = "+pool.escape(parseInt(id));
       pool.query(user_query, function(err, result, fields) {
