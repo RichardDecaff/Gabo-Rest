@@ -11,8 +11,10 @@
     <table class="uk-table uk-table-small uk-table-striped">
       <thead>
         <button class="uk-button uk-button-small" id="btnCita">
-        Crear cita...</button>
-        <tr> <!-- este renglón contiene el botón de agregar -->
+          Crear cita...</button>
+        <!--<span class="uk-margin-left"><input id="verPasadas" class="uk-checkbox" type="checkbox">
+        <span uk-icon="icon: history"></span></span> -->
+        <tr>
             <th>Evento</th>
             <th>Hora</th>
             <th>Ubicación</th>
@@ -43,92 +45,109 @@
 
 
 <script>
-
-function llenarCitas(){
-  var $tblCitas = $("#tbl_citas");
-  $.ajax({
-    url: ("./api/Agendas/usuario/" + me.usuario_id),
-    success: function(result){
-      $tblCitas.empty();
-      console.table(result);
-      if (result.length < 1) {
-        $tblCitas.append("<tr><td class=\"uk-text-meta\">No hay citas en la agenda</td><td></td><td></td></tr>");
-      }
-      result.forEach(element => {
-        $("#tbl_citas").append("<tr><td>"+element.titulo+"</td><td>"
-        +fechaConFormato(element.fecha_creada)+"</td><td>"+element.ubicacion+"</td></tr>");
-      });
-      $("#tbl_citas").append("<th>Citas pasadas</th><th></th><th></th>")
-    },
-    error: function(){
-      $tblCitas.append("<tr><td class=\"uk-text-meta\">Problema conectando con el servidor :(</td><td></td><td></td></tr>");
-    }
-  });
-}
-
-function fechaConFormato(d) {
-  d = new Date(d);
-  var h = d.getHours();
-
-  return new Intl.DateTimeFormat('es-ES', {
-    month: 'short',
-    weekday: 'short',
-    day: 'numeric',
-    hour: 'numeric',
-    minute: 'numeric',
-    hour12: true
-  }).format(d);
-}
-
-function llenarClientes() {
-  var $tblFlujo = $("#tbl_flujo");
-  $.ajax({
-    url: ("./api/Clientes/usuario/" + me.usuario_id),
-    success: function(r){
-      console.log(r);
-      $tblFlujo.empty();
-      if (r.length < 1){
-        $tblFlujo.append("<tr><td class=\"uk-text-meta\">No tienes clentes (todavia)</td><td></td><td></td></tr>");
-      };
-      r.forEach(function(e) {
-        var renglon = "<tr><td>" + e.nombre;
-        renglon += ("</td><td>" + estadosClientes[e.estado] + "</td><td>...</td></tr>");
-        //TODO insertar boton segun status
-        $tblFlujo.append(renglon);
-      });
-    }
-  });
-}
-
-
-var estadosClientes = [
-  'Demo agendada',
-  'Demo realizada',
-  'Anticipo pagado',
-  'Pago de contado', //wait deposit
-  'Entregado',
-  'Cita cancelada',
-  'No venta',
-  'Archivado'
-];
-
 $(function(){
+  function fechaConFormato(d) {
+    d = new Date(d);
+    var h = d.getHours();
+
+    return new Intl.DateTimeFormat('es-ES', {
+      month: 'short',
+      weekday: 'short',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
+      hour12: true
+    }).format(d);
+  }
+
+  function llenarClientes() {
+    var $tblFlujo = $("#tbl_flujo");
+    $.ajax({
+      url: ("./api/Clientes/usuario/" + me.usuario_id),
+      success: function(r){
+        $tblFlujo.empty();
+        if (r.length < 1){
+          $tblFlujo.append("<tr><td class=\"uk-text-meta\">No tienes clentes (todavia)</td><td></td><td></td></tr>");
+        };
+        r.forEach(function(e) {
+          var renglon = "<tr><td>" + e.nombre;
+          renglon += ("</td><td>" + estadosClientes[e.estado] + "</td><td>...</td></tr>");
+          //TODO insertar boton segun status
+          $tblFlujo.append(renglon);
+        });
+      }
+    });
+  }
+  var estadosClientes = [
+    'Demo agendada',
+    'Demo realizada',
+    'Anticipo pagado',
+    'Pago de contado', //wait deposit
+    'Entregado',
+    'Cita cancelada',
+    'No venta',
+    'Archivado'
+  ];
+  $("#panelFlujo").one('beforeshow', function(e){
+    llenarClientes();
+  });
+
   $("#btnCita").on('click', function (){
-    //cargar vista nueva cita
     subVista('nuevaCita.html');
-  })
+  });
   $("#adminUsers").on('click', function(e){
     e.preventDefault();
     subVista('adminUsuarios.html');
-  })
+  });
 
-  llenarCitas();
-  llenarClientes();
+  if (me.nivel > 1) {
+    $("#btnCita").after("<span class=\"uk-margin-left\"><label><input id=\"verGlobal\" class=\"uk-checkbox\" type=\"checkbox\"> Ver de todos</label></span>");
+    $("#verGlobal").on('change', function(e){
+      if (!e.target.checked) {mostrarAgenda(laAgenda.responseJSON);}
+    });
+  }
+
+  var laAgenda, agendaGlobal;
+  function cargarAgenda(){
+    if (me.nivel > 1){
+      agendaGlobal = $.get("./api/Agendas", function(){
+        $("#verGlobal").on('change', function(e){
+          if (e.target.checked) {mostrarAgenda(agendaGlobal.responseJSON);}
+        });
+      });
+    }
+    laAgenda = $.get("./api/Agendas/usuario/" + me.usuario_id, function(){
+        mostrarAgenda(laAgenda.responseJSON);
+    });
+  }
+  cargarAgenda();
+
+  function mostrarAgenda(lista) {
+    var $tblCitas = $("#tbl_citas");
+    $tblCitas.empty();
+    if (lista.length < 1) {
+      $tblCitas.append("<tr><td class=\"uk-text-meta\">No hay citas en la agenda</td><td></td><td></td></tr>");
+      return;
+    }
+
+    lista.sort(function(a,b){
+      return new Date(a.fecha_creada) - new Date(b.fecha_creada);
+    });
+    lista.forEach(element => {
+      if (new Date(element.fecha_creada) > new Date()) {
+        $("#tbl_citas").append("<tr><td>"+element.titulo+"</td><td>"+fechaConFormato(element.fecha_creada)+"</td><td>"+element.ubicacion+"</td></tr>");
+      }
+    });
+  }
+
 });
 
 //TODO actualizacion de eventos segun fecha, opcion cancelar citas
 //TODO vista global para N2, agrupar por dia
 //no permitir eventos antes a hoy
 // no dejar encimar citas
+
+//TODO https://fullcalendar.io/docs/methods, https://jonthornton.github.io/jquery-timepicker/
+//  www.vps.net
 
 </script>
